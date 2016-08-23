@@ -1,0 +1,54 @@
+<configuration scan="true">
+    <statusListener class="ch.qos.logback.core.status.OnConsoleStatusListener"/>
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d [%thread] %-5level %logger{36} %line - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="FILEAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>logs/matry.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>logs/tv.log-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>500MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+            <maxHistory>2</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d [%thread] %-5level %logger{36} %line - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="FILE" class="ch.qos.logback.classic.AsyncAppender">
+        <appender-ref ref="FILEAppender"/>
+    </appender>
+
+	<appender name="actionFileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>logs/bi/action.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>logs/bi/action.log-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>500MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>time:%d{yyyy-MM-dd HH:mm:ss.SSS}|%msg%n</pattern>
+        </encoder>
+    </appender>
+    
+    <appender name="actionFile" class="ch.qos.logback.classic.AsyncAppender">
+        <appender-ref ref="actionFileAppender"/>
+    </appender>
+    
+	<logger name="ACTION-LOGGER" level="INFO" additivity="false">
+        <appender-ref ref="actionFile"/>
+    </logger>
+    
+    <root level="DEBUG">
+        <appender-ref ref="STDOUT"/>
+         <appender-ref ref="FILE"/>
+    </root>
+</configuration>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd"
+       default-lazy-init="false">
+
+    <bean id="vertx" class="io.vertx.core.Vertx" factory-method="vertx" />
+
+    <bean id="httpServerOptions" class="io.vertx.core.http.HttpServerOptions">
+        <property name="host" value="0.0.0.0"/>
+        <property name="port" value="${httpServerOptions.port}"/>
+        <property name="tcpNoDelay" value="true"/>
+    </bean>
+
+    <bean id="eventBus" class="io.vertx.core.eventbus.EventBus" factory-bean="vertx" factory-method="eventBus"/>
+
+
+    <bean id="DeliveryOptions" class="io.vertx.core.eventbus.DeliveryOptions">
+        <property name="codecName" value="ObjectCodec"/>
+        <property name="sendTimeout" value="50000"/>
+    </bean>
+    <!-- httpClient 配置 start -->
+
+    <bean id="httpClientOptions" class="io.vertx.core.http.HttpClientOptions">
+        <property name="keepAlive" value="${httpClientOptions.keepAlive}"/>
+        <property name="maxPoolSize" value="${httpClientOptions.maxPoolSize}"/>
+    </bean>
+
+    <bean id="httpClient" class="io.vertx.core.http.HttpClient" factory-bean="vertx" factory-method="createHttpClient" >
+        <constructor-arg ref="httpClientOptions"></constructor-arg>
+    </bean>
+    <!-- httpClient 配置 end -->
+</beans>
